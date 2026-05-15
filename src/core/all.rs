@@ -211,6 +211,8 @@ fn build_registered_controllers() -> Vec<RegisteredController> {
     );
     // Integration notification ingest, triage, and per-provider settings
     controllers.extend(crate::openhuman::notifications::all_notifications_registered_controllers());
+    // TimeTree → Google Calendar sync
+    controllers.extend(crate::openhuman::timetree::all_timetree_registered_controllers());
     // Google Meet call-join request validation (shell handles the webview)
     controllers.extend(crate::openhuman::meet::all_meet_registered_controllers());
     // Live meet-agent loop: STT/LLM/TTS over the open call's audio.
@@ -296,6 +298,8 @@ fn build_declared_controller_schemas() -> Vec<ControllerSchema> {
     );
     // Integration notification ingest, triage, and per-provider settings
     schemas.extend(crate::openhuman::notifications::all_notifications_controller_schemas());
+    // TimeTree → Google Calendar sync
+    schemas.extend(crate::openhuman::timetree::all_timetree_controller_schemas());
     // Google Meet call-join request validation
     schemas.extend(crate::openhuman::meet::all_meet_controller_schemas());
     // Live meet-agent listening + speaking loop
