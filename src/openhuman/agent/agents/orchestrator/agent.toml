@@ -50,6 +50,10 @@ subagents = [
     # the agent enforces a strict read → simulate → confirm → execute
     # contract that the generic delegation surface does not.
     "crypto_agent",
+    # Professional image editor — colour correction, noise reduction,
+    # sharpness, lighting, composition, and style variants. Route any
+    # image enhancement, retouching, or creative-edit request here.
+    "image_editor",
     # NOTE: `summarizer` used to be listed here for the runtime-only
     # oversized-tool-result hook. That path is currently disabled
     # (`context.summarizer_payload_threshold_tokens = 0`) after recursive
