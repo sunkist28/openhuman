@@ -1,0 +1,27 @@
+id = "image_editor"
+display_name = "Image Editor"
+delegate_name = "edit_image"
+when_to_use = "Professional image editor — color correction, noise reduction, sharpness, lighting, composition, and style variants. Use for any image enhancement or retouching task."
+temperature = 0.3
+max_iterations = 8
+max_result_chars = 6000
+sandbox_mode = "sandboxed"
+omit_identity = true
+omit_memory_context = true
+omit_safety_preamble = false
+omit_skills_catalog = true
+
+[model]
+hint = "agentic"
+
+[tools]
+named = [
+    "file_read",
+    "file_write",
+    "shell",
+    "glob",
+    "list",
+    "http_request",
+    "curl",
+    "ask_user_clarification",
+]

@@ -137,6 +137,11 @@ pub const BUILTINS: &[BuiltinAgent] = &[
         toml: include_str!("help/agent.toml"),
         prompt_fn: super::help::prompt::build,
     },
+    BuiltinAgent {
+        id: "image_editor",
+        toml: include_str!("image_editor/agent.toml"),
+        prompt_fn: super::image_editor::prompt::build,
+    },
 ];
 
 /// Parse every entry in [`BUILTINS`] into an [`AgentDefinition`].
@@ -182,7 +187,7 @@ mod tests {
     fn all_builtins_parse() {
         let defs = load_builtins().expect("built-in TOML must parse");
         assert_eq!(defs.len(), BUILTINS.len());
-        assert_eq!(defs.len(), 16, "expected 16 built-in agents");
+        assert_eq!(defs.len(), 17, "expected 17 built-in agents");
     }
 
     #[test]

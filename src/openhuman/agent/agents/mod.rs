@@ -9,6 +9,7 @@ pub mod code_executor;
 pub mod critic;
 pub mod crypto_agent;
 pub mod help;
+pub mod image_editor;
 pub mod integrations_agent;
 pub mod morning_briefing;
 pub mod orchestrator;
