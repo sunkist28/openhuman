@@ -46,12 +46,12 @@ Canonical mapping of every product feature to its test source(s). Drives gap-fil
 
 ### 0.3 Updates & Reinstallation
 
-| ID    | Feature                       | Layer | Test path(s)                                       | Status | Notes                                 |
-| ----- | ----------------------------- | ----- | -------------------------------------------------- | ------ | ------------------------------------- |
+| ID    | Feature                       | Layer    | Test path(s)                                                                | Status | Notes                                                                           |
+| ----- | ----------------------------- | -------- | --------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------- |
 | 0.3.1 | Auto Update Check             | RU+RI+MS | `src/openhuman/update/` (Rust unit), `tests/json_rpc_e2e.rs`, release smoke | 🟡     | Core check/update policy covered; desktop prompt + release upgrade still manual |
-| 0.3.2 | Forced Update Handling        | MS    | release-manual-smoke                               | 🚫     | End-to-end gating verified at release |
-| 0.3.3 | Reinstall with Existing State | MS    | release-manual-smoke                               | 🚫     | Workspace persistence on reinstall    |
-| 0.3.4 | Clean Uninstall               | MS    | release-manual-smoke                               | 🚫     | OS removal paths                      |
+| 0.3.2 | Forced Update Handling        | MS       | release-manual-smoke                                                        | 🚫     | End-to-end gating verified at release                                           |
+| 0.3.3 | Reinstall with Existing State | MS       | release-manual-smoke                                                        | 🚫     | Workspace persistence on reinstall                                              |
+| 0.3.4 | Clean Uninstall               | MS       | release-manual-smoke                                                        | 🚫     | OS removal paths                                                                |
 
 ---
 
@@ -235,6 +235,12 @@ Canonical mapping of every product feature to its test source(s). Drives gap-fil
 | 6.2.3 | Git Read Operations          | RU+WD | `src/openhuman/tools/impl/filesystem/git_operations_tests.rs`, `app/test/e2e/specs/tool-shell-git-flow.spec.ts` (this PR) | ✅     | Was 🟡 — WDIO seeds a fixture repo in OPENHUMAN_WORKSPACE and asserts read ops succeed           |
 | 6.2.4 | Git Write Operations         | RU+WD | `src/openhuman/tools/impl/filesystem/git_operations_tests.rs`, `app/test/e2e/specs/tool-shell-git-flow.spec.ts` (this PR) | ✅     | Was 🟡 — WDIO commits into the same fixture and asserts log advances                             |
 
+### 6.3 Built-in Agents
+
+| ID    | Feature                         | Layer | Test path(s)                                                                                                                                        | Status | Notes                                                                                                        |
+| ----- | ------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------ |
+| 6.3.1 | Generalist Agent (cross-domain) | RU+VU | `src/openhuman/agent/agents/loader.rs`, `src/openhuman/agent/agents/generalist/prompt.rs`, `app/src/utils/__tests__/toolTimelineFormatting.test.ts` | ✅     | Loader tests pin sandbox/safety/tool-scope contract + orchestrator routing; Vitest covers the timeline label |
+
 ---
 
 ## 7. Web & Network Capabilities
@@ -275,17 +281,17 @@ Canonical mapping of every product feature to its test source(s). Drives gap-fil
 
 ### 8.3 Memory Retrieval Benchmarks
 
-| ID    | Feature                                  | Layer | Test path(s)                                                                       | Status | Notes |
-| ----- | ---------------------------------------- | ----- | ---------------------------------------------------------------------------------- | ------ | ----- |
-| 8.3.1 | Cross-Chat Recall                        | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_cross_chat_recall`        | ✅     | Synthetic fixture; verifies relevant source retrieval across chat scopes |
-| 8.3.2 | Cross-Chat Entity Discoverability        | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_cross_chat_entity_discoverable` | ✅     | Verifies entity canonicalisation across multiple chats |
-| 8.3.3 | Citation Bundle Provenance               | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_citation_bundle_provenance` | ✅     | Verifies source_ref and tree_scope are populated in retrieval hits |
-| 8.3.4 | Citation Fetch Leaves Hydration         | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_citation_fetch_leaves_hydrates` | ✅     | Verifies fetch_leaves returns content for exact chunk IDs |
-| 8.3.5 | Stale Preference Newer Supersedes       | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_stale_preference_newer_supersedes` | ✅     | Verifies newer explicit correction appears alongside older preference |
-| 8.3.6 | Contradiction Surfaces Both with Provenance | RU | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_contradiction_surfaces_both_with_provenance` | ✅     | Verifies disagreeing sources surface with provenance labels |
-| 8.3.7 | Long-Source Exact Leaf Retrieval         | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_long_source_retrieves_exact_leaf` | 🟡     | Embedder required for seal + chunking; test runs in inert mode but assertions are conditional |
-| 8.3.8 | Drill-Down Isolates Children             | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_drill_down_isolates_children` | ✅     | Verifies query_topic does not cross scope boundaries |
-| 8.3.9 | Scale Ingest 20 Sources No Real Data    | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_scale_ingest_20_sources_no_real_data` | ✅     | Verifies retrieval correctness at scale with synthetic data |
+| ID    | Feature                                     | Layer | Test path(s)                                                                                           | Status | Notes                                                                                         |
+| ----- | ------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------ | ------ | --------------------------------------------------------------------------------------------- |
+| 8.3.1 | Cross-Chat Recall                           | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_cross_chat_recall`                           | ✅     | Synthetic fixture; verifies relevant source retrieval across chat scopes                      |
+| 8.3.2 | Cross-Chat Entity Discoverability           | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_cross_chat_entity_discoverable`              | ✅     | Verifies entity canonicalisation across multiple chats                                        |
+| 8.3.3 | Citation Bundle Provenance                  | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_citation_bundle_provenance`                  | ✅     | Verifies source_ref and tree_scope are populated in retrieval hits                            |
+| 8.3.4 | Citation Fetch Leaves Hydration             | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_citation_fetch_leaves_hydrates`              | ✅     | Verifies fetch_leaves returns content for exact chunk IDs                                     |
+| 8.3.5 | Stale Preference Newer Supersedes           | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_stale_preference_newer_supersedes`           | ✅     | Verifies newer explicit correction appears alongside older preference                         |
+| 8.3.6 | Contradiction Surfaces Both with Provenance | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_contradiction_surfaces_both_with_provenance` | ✅     | Verifies disagreeing sources surface with provenance labels                                   |
+| 8.3.7 | Long-Source Exact Leaf Retrieval            | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_long_source_retrieves_exact_leaf`            | 🟡     | Embedder required for seal + chunking; test runs in inert mode but assertions are conditional |
+| 8.3.8 | Drill-Down Isolates Children                | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_drill_down_isolates_children`                | ✅     | Verifies query_topic does not cross scope boundaries                                          |
+| 8.3.9 | Scale Ingest 20 Sources No Real Data        | RU    | `src/openhuman/memory/tree/retrieval/benchmarks.rs::bench_scale_ingest_20_sources_no_real_data`        | ✅     | Verifies retrieval correctness at scale with synthetic data                                   |
 
 ---
 
@@ -337,12 +343,12 @@ Canonical mapping of every product feature to its test source(s). Drives gap-fil
 
 ### 10.3 Message Sync & Ingestion
 
-| ID     | Feature                   | Layer | Test path(s)                                          | Status | Notes |
-| ------ | ------------------------- | ----- | ----------------------------------------------------- | ------ | ----- |
-| 10.3.1 | Incoming Message Sync     | RU+WD | `src/openhuman/channels/tests/`, `gmail-flow.spec.ts` | ✅     |       |
-| 10.3.2 | Message Deduplication     | RU    | `src/openhuman/channels/tests/`                       | ✅     |       |
+| ID     | Feature                   | Layer | Test path(s)                                                                                                               | Status | Notes                                                                                                                                           |
+| ------ | ------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 10.3.1 | Incoming Message Sync     | RU+WD | `src/openhuman/channels/tests/`, `gmail-flow.spec.ts`                                                                      | ✅     |                                                                                                                                                 |
+| 10.3.2 | Message Deduplication     | RU    | `src/openhuman/channels/tests/`                                                                                            | ✅     |                                                                                                                                                 |
 | 10.3.3 | WhatsApp Agent Retrieval  | RU    | `src/openhuman/tools/impl/whatsapp_data/` (this PR), `tests/json_rpc_e2e.rs::whatsapp_data_agent_tools_e2e_1341` (this PR) | ✅     | Three read-only agent tools wrap the local SQLite store; ingest stays internal-only. See [`docs/whatsapp-data-flow.md`](whatsapp-data-flow.md). |
-| 10.3.4 | Real-Time vs Delayed Sync | RU    | `src/openhuman/channels/tests/runtime_dispatch.rs`    | ✅     |       |
+| 10.3.4 | Real-Time vs Delayed Sync | RU    | `src/openhuman/channels/tests/runtime_dispatch.rs`                                                                         | ✅     |                                                                                                                                                 |
 
 ### 10.4 Messaging Operations
 
@@ -410,19 +416,19 @@ Canonical mapping of every product feature to its test source(s). Drives gap-fil
 
 ### 12.1 Role Unlocking
 
-| ID     | Feature                  | Layer | Test path(s)                                                                                                          | Status | Notes                                                                |
-| ------ | ------------------------ | ----- | --------------------------------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------- |
-| 12.1.1 | Activity-Based Unlock    | VU+WD | `app/src/store/__tests__/rewardsSlice.test.ts` (this PR), `app/test/e2e/specs/rewards-unlock-flow.spec.ts` (this PR)  | ✅     | Was ❌ — streak/feature-driven unlock branch                         |
-| 12.1.2 | Integration-Based Unlock | VU+WD | same                                                                                                                   | ✅     | Was ❌ — Discord membership → role assignment branch                 |
-| 12.1.3 | Plan-Based Unlock        | VU+WD | same                                                                                                                   | ✅     | Was ❌ — plan tier + active subscription branch                      |
+| ID     | Feature                  | Layer | Test path(s)                                                                                                         | Status | Notes                                                |
+| ------ | ------------------------ | ----- | -------------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------- |
+| 12.1.1 | Activity-Based Unlock    | VU+WD | `app/src/store/__tests__/rewardsSlice.test.ts` (this PR), `app/test/e2e/specs/rewards-unlock-flow.spec.ts` (this PR) | ✅     | Was ❌ — streak/feature-driven unlock branch         |
+| 12.1.2 | Integration-Based Unlock | VU+WD | same                                                                                                                 | ✅     | Was ❌ — Discord membership → role assignment branch |
+| 12.1.3 | Plan-Based Unlock        | VU+WD | same                                                                                                                 | ✅     | Was ❌ — plan tier + active subscription branch      |
 
 ### 12.2 Progress Tracking
 
-| ID     | Feature                | Layer | Test path(s)                                                                                                                  | Status | Notes                                                                                                |
-| ------ | ---------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------- |
-| 12.2.1 | Message Count Tracking | VU+WD | `rewardsSlice.test.ts` (this PR), `rewards-progression-persistence.spec.ts` (this PR)                                          | ✅     | Was ❌ — message-driven progress proxied by `metrics.featuresUsedCount` (no literal field)           |
-| 12.2.2 | Usage Metrics          | VU+WD | same                                                                                                                           | ✅     | Was ❌ — current streak + cumulative tokens                                                          |
-| 12.2.3 | State Persistence      | VU+WD | same                                                                                                                           | ✅     | Was ❌ — restart-equivalent (page unmount + remount + re-fetch); admin request log asserts re-fetch  |
+| ID     | Feature                | Layer | Test path(s)                                                                          | Status | Notes                                                                                               |
+| ------ | ---------------------- | ----- | ------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------- |
+| 12.2.1 | Message Count Tracking | VU+WD | `rewardsSlice.test.ts` (this PR), `rewards-progression-persistence.spec.ts` (this PR) | ✅     | Was ❌ — message-driven progress proxied by `metrics.featuresUsedCount` (no literal field)          |
+| 12.2.2 | Usage Metrics          | VU+WD | same                                                                                  | ✅     | Was ❌ — current streak + cumulative tokens                                                         |
+| 12.2.3 | State Persistence      | VU+WD | same                                                                                  | ✅     | Was ❌ — restart-equivalent (page unmount + remount + re-fetch); admin request log asserts re-fetch |
 
 ---
 
@@ -437,33 +443,33 @@ Canonical mapping of every product feature to its test source(s). Drives gap-fil
 
 ### 13.2 Automation & Channels
 
-| ID     | Feature               | Layer | Test path(s)                                                | Status | Notes |
-| ------ | --------------------- | ----- | ----------------------------------------------------------- | ------ | ----- |
-| 13.2.1 | Channel Configuration | WD    | `app/test/e2e/specs/settings-channels-permissions.spec.ts`  | ✅     |       |
-| 13.2.2 | Permission Settings   | WD    | `app/test/e2e/specs/settings-channels-permissions.spec.ts`  | ✅     |       |
+| ID     | Feature               | Layer | Test path(s)                                               | Status | Notes |
+| ------ | --------------------- | ----- | ---------------------------------------------------------- | ------ | ----- |
+| 13.2.1 | Channel Configuration | WD    | `app/test/e2e/specs/settings-channels-permissions.spec.ts` | ✅     |       |
+| 13.2.2 | Permission Settings   | WD    | `app/test/e2e/specs/settings-channels-permissions.spec.ts` | ✅     |       |
 
 ### 13.3 AI & Skills
 
-| ID     | Feature             | Layer | Test path(s)                                                                                                              | Status | Notes                               |
-| ------ | ------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------- |
-| 13.3.1 | Model Configuration | VU+WD | `app/src/components/settings/panels/__tests__/AutocompletePanel.test.tsx`, `app/test/e2e/specs/settings-ai-skills.spec.ts` | ✅     | AI-model-switch covered             |
-| 13.3.2 | Skill Toggle        | WD    | `skill-lifecycle.spec.ts`, `app/test/e2e/specs/settings-ai-skills.spec.ts`                                                 | ✅     |                                     |
+| ID     | Feature             | Layer | Test path(s)                                                                                                               | Status | Notes                   |
+| ------ | ------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------- | ------ | ----------------------- |
+| 13.3.1 | Model Configuration | VU+WD | `app/src/components/settings/panels/__tests__/AutocompletePanel.test.tsx`, `app/test/e2e/specs/settings-ai-skills.spec.ts` | ✅     | AI-model-switch covered |
+| 13.3.2 | Skill Toggle        | WD    | `skill-lifecycle.spec.ts`, `app/test/e2e/specs/settings-ai-skills.spec.ts`                                                 | ✅     |                         |
 
 ### 13.4 Developer Options
 
-| ID     | Feature            | Layer | Test path(s)                                         | Status | Notes |
-| ------ | ------------------ | ----- | ---------------------------------------------------- | ------ | ----- |
-| 13.4.1 | Webhook Inspection | WD    | `app/test/e2e/specs/settings-dev-options.spec.ts`    | ✅     |       |
-| 13.4.2 | Runtime Logs       | WD    | `app/test/e2e/specs/settings-dev-options.spec.ts`    | ✅     |       |
-| 13.4.3 | Memory Debug       | WD    | `app/test/e2e/specs/settings-dev-options.spec.ts`    | ✅     |       |
+| ID     | Feature            | Layer | Test path(s)                                      | Status | Notes |
+| ------ | ------------------ | ----- | ------------------------------------------------- | ------ | ----- |
+| 13.4.1 | Webhook Inspection | WD    | `app/test/e2e/specs/settings-dev-options.spec.ts` | ✅     |       |
+| 13.4.2 | Runtime Logs       | WD    | `app/test/e2e/specs/settings-dev-options.spec.ts` | ✅     |       |
+| 13.4.3 | Memory Debug       | WD    | `app/test/e2e/specs/settings-dev-options.spec.ts` | ✅     |       |
 
 ### 13.5 Data Management
 
-| ID     | Feature          | Layer | Test path(s)                                            | Status | Notes                                  |
-| ------ | ---------------- | ----- | ------------------------------------------------------- | ------ | -------------------------------------- |
-| 13.5.1 | Clear App Data   | WD    | `app/test/e2e/specs/settings-data-management.spec.ts`   | ✅     | Destructive — confirm-then-reset       |
-| 13.5.2 | Cache Reset      | WD    | `app/test/e2e/specs/settings-data-management.spec.ts`   | ✅     |                                        |
-| 13.5.3 | Full State Reset | WD    | `app/test/e2e/specs/settings-data-management.spec.ts`   | ✅     | Restart-and-verify fresh-install state |
+| ID     | Feature          | Layer | Test path(s)                                          | Status | Notes                                  |
+| ------ | ---------------- | ----- | ----------------------------------------------------- | ------ | -------------------------------------- |
+| 13.5.1 | Clear App Data   | WD    | `app/test/e2e/specs/settings-data-management.spec.ts` | ✅     | Destructive — confirm-then-reset       |
+| 13.5.2 | Cache Reset      | WD    | `app/test/e2e/specs/settings-data-management.spec.ts` | ✅     |                                        |
+| 13.5.3 | Full State Reset | WD    | `app/test/e2e/specs/settings-data-management.spec.ts` | ✅     | Restart-and-verify fresh-install state |
 
 ---
 
