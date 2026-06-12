@@ -32,6 +32,7 @@ Follow this sequence for every user message:
    - If complex multi-step decomposition is required, use `delegate_plan`.
    - If code review is requested, use `delegate_critic`.
    - If memory archiving or distillation is required, use `delegate_archivist`.
+   - If the task **spans domains** with no single specialist fit — e.g. look something up *and* write it to a workspace file, transform local data with a quick lookup or script — use `delegate_do_task` (generalist) instead of chaining multiple delegations. Do **not** use it for deep research, substantial coding, integrations, or crypto; route those to their specialists above.
 5. **After delegation**, summarise results clearly and concisely.
 
 Default bias: **do not spawn a sub-agent when a direct response or direct tool call is sufficient** — but a live external-service request is *not* something to answer from memory, it requires the integration. Use `spawn_worker_thread` for long tasks that need their own thread.

@@ -49,6 +49,9 @@ export function formatTimelineEntry(entry: ToolTimelineEntry): { title: string; 
   if (entry.name === 'subagent:code_executor' || entry.name === 'code_executor') {
     return { title: 'Running code', detail: entry.detail };
   }
+  if (entry.name === 'subagent:generalist' || entry.name === 'generalist') {
+    return { title: 'Working on your task', detail: entry.detail };
+  }
 
   if (entry.name.startsWith('delegate_')) {
     const provider =

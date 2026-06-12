@@ -937,6 +937,21 @@ const CAPABILITIES: &[Capability] = &[
         privacy: LOCAL_CREDENTIALS,
     },
     Capability {
+        id: "automation.generalist_agent",
+        name: "Generalist Agent",
+        domain: "automation",
+        category: CapabilityCategory::Automation,
+        description: "General-purpose sub-agent for broad, cross-domain tasks — looking \
+                      something up and writing it to a file, transforming workspace data, \
+                      combining research with light scripting. Runs sandboxed with a \
+                      curated tool kit (web lookup, workspace file I/O, shell, memory) \
+                      and hands off deep single-domain work to the dedicated \
+                      specialists.",
+        how_to: "Automatic — invoked by the orchestrator when a task spans domains and no single specialist fits.",
+        status: CapabilityStatus::Beta,
+        privacy: None,
+    },
+    Capability {
         id: "automation.welcome_agent",
         name: "Welcome Message",
         domain: "automation",

@@ -120,6 +120,14 @@ describe('formatTimelineEntry', () => {
     });
   });
 
+  it('formats the generalist subagent with user-facing copy', () => {
+    expect(
+      formatTimelineEntry(
+        entry({ name: 'subagent:generalist', detail: 'Summarise the report into notes/x.md' })
+      )
+    ).toEqual({ title: 'Working on your task', detail: 'Summarise the report into notes/x.md' });
+  });
+
   it('formats composio_list_connections with user-facing copy', () => {
     expect(formatTimelineEntry(entry({ name: 'composio_list_connections' }))).toEqual({
       title: 'Viewing your Connections',

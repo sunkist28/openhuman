@@ -98,6 +98,11 @@ pub const BUILTINS: &[BuiltinAgent] = &[
         prompt_fn: super::researcher::prompt::build,
     },
     BuiltinAgent {
+        id: "generalist",
+        toml: include_str!("generalist/agent.toml"),
+        prompt_fn: super::generalist::prompt::build,
+    },
+    BuiltinAgent {
         id: "critic",
         toml: include_str!("critic/agent.toml"),
         prompt_fn: super::critic::prompt::build,
@@ -182,7 +187,7 @@ mod tests {
     fn all_builtins_parse() {
         let defs = load_builtins().expect("built-in TOML must parse");
         assert_eq!(defs.len(), BUILTINS.len());
-        assert_eq!(defs.len(), 16, "expected 16 built-in agents");
+        assert_eq!(defs.len(), 17, "expected 17 built-in agents");
     }
 
     #[test]
@@ -628,6 +633,84 @@ mod tests {
             listed,
             "orchestrator.subagents must list `crypto_agent` so the \
              routing layer can synthesise `delegate_do_crypto`"
+        );
+    }
+
+    /// Generalist is the curated cross-domain everyday worker: named
+    /// (never wildcard) tool scope spanning lookup + workspace I/O +
+    /// light execution, sandboxed, with the global safety preamble ON
+    /// because it holds write + exec tools. Pin all of that so a TOML
+    /// edit can't silently widen its blast radius into a second
+    /// wildcard `tools_agent`.
+    #[test]
+    fn generalist_is_sandboxed_cross_domain_with_safety_on() {
+        let def = find("generalist");
+        assert!(matches!(def.model, ModelSpec::Hint(ref h) if h == "agentic"));
+        assert_eq!(
+            def.sandbox_mode,
+            SandboxMode::Sandboxed,
+            "generalist holds shell/file_write — must stay sandboxed"
+        );
+        assert!(
+            !def.omit_safety_preamble,
+            "generalist must keep the global safety preamble — it has write + exec tools"
+        );
+        match &def.tools {
+            ToolScope::Named(tools) => {
+                // Cross-domain kit: one representative per surface.
+                for required in [
+                    "web_search",
+                    "file_read",
+                    "file_write",
+                    "shell",
+                    "memory_recall",
+                    "ask_user_clarification",
+                ] {
+                    assert!(
+                        tools.iter().any(|t| t == required),
+                        "generalist needs `{required}`"
+                    );
+                }
+                // Hard exclusions — anything integration- or
+                // delegation-shaped belongs to the specialists.
+                for forbidden in [
+                    "composio_execute",
+                    "composio_list_tools",
+                    "spawn_subagent",
+                    "spawn_worker_thread",
+                    "wallet_execute_prepared",
+                ] {
+                    assert!(
+                        !tools.iter().any(|t| t == forbidden),
+                        "generalist must NOT have `{forbidden}`"
+                    );
+                }
+            }
+            ToolScope::Wildcard => {
+                panic!("generalist must have a Named tool scope — wildcard is tools_agent's job")
+            }
+        }
+        assert_eq!(def.max_iterations, 12);
+        assert!(def.omit_identity);
+        assert!(def.omit_memory_context);
+        assert!(def.omit_skills_catalog);
+    }
+
+    /// Routing: the orchestrator must list `generalist` in its
+    /// `subagents` so a `delegate_do_task` tool is synthesised at
+    /// agent-build time.
+    #[test]
+    fn orchestrator_subagents_include_generalist() {
+        use crate::openhuman::agent::harness::definition::SubagentEntry;
+        let def = find("orchestrator");
+        let listed = def.subagents.iter().any(|e| match e {
+            SubagentEntry::AgentId(id) => id == "generalist",
+            _ => false,
+        });
+        assert!(
+            listed,
+            "orchestrator.subagents must list `generalist` so the \
+             routing layer can synthesise `delegate_do_task`"
         );
     }
 
