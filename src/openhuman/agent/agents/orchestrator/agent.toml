@@ -44,6 +44,11 @@ subagents = [
     "tools_agent",
     "critic",
     "archivist",
+    # Cross-domain everyday worker. Synthesised into a `delegate_do_task`
+    # tool at agent-build time. Route broad tasks that mix lookup +
+    # workspace I/O + light execution here when no single specialist
+    # fits and chaining delegations would add more overhead than value.
+    "generalist",
     # Crypto wallet & market specialist (#1397). Synthesised into a
     # `delegate_do_crypto` tool at agent-build time. Route any wallet,
     # transfer, swap, contract-call, or exchange trading request here —

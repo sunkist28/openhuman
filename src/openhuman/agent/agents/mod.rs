@@ -8,6 +8,7 @@ pub mod archivist;
 pub mod code_executor;
 pub mod critic;
 pub mod crypto_agent;
+pub mod generalist;
 pub mod help;
 pub mod integrations_agent;
 pub mod morning_briefing;

@@ -1,0 +1,49 @@
+id = "generalist"
+display_name = "Generalist"
+delegate_name = "do_task"
+when_to_use = "General-purpose agent — handles broad or cross-domain tasks end-to-end (look something up and write it into a file, transform workspace data, combine research with light scripting) when no single specialist fits and chaining multiple delegations would add more overhead than value. For pure documentation lookups use `ask_docs`; for heavy coding use `run_code`; for deep multi-source research use `research`; for crypto wallet actions use `do_crypto`."
+temperature = 0.4
+max_iterations = 12
+max_result_chars = 12000
+# Sandboxed: the generalist can read/write files and run shell, but only
+# inside the workspace sandbox — same containment contract as
+# `code_executor`.
+sandbox_mode = "sandboxed"
+omit_identity = true
+omit_memory_context = true
+# Safety preamble stays ON — the generalist holds write + exec tools.
+omit_safety_preamble = false
+omit_skills_catalog = true
+
+[model]
+hint = "agentic"
+
+[tools]
+# A deliberately *named* (not wildcard) cross-domain surface. The
+# wildcard generalist already exists as `tools_agent` (heavyweight
+# ad-hoc execution inheriting the orchestrator's full tool set); this
+# agent instead carries a curated everyday kit — lookup, workspace I/O,
+# light execution, memory — so its prompt and schema stay small and its
+# blast radius stays bounded.
+named = [
+    # Lookup / web.
+    "web_search",
+    "web_fetch",
+    "http_request",
+    # Workspace navigation + I/O.
+    "file_read",
+    "file_write",
+    "edit",
+    "grep",
+    "glob",
+    "list",
+    # Light execution (sandboxed — see sandbox_mode above).
+    "shell",
+    # Memory.
+    "memory_recall",
+    "memory_store",
+    # Coordination / grounding.
+    "current_time",
+    "todowrite",
+    "ask_user_clarification",
+]
