@@ -121,14 +121,20 @@ const PROVIDER_PRESETS: ProviderPreset[] = [
     id: 'openrouter',
     label: 'OpenRouter',
     apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
-    suggestedModel: 'openai/gpt-4o',
+    suggestedModel: 'google/gemini-2.5-flash',
+    // Mixed-vendor defaults, picked per role: Gemini 2.5 Pro for the
+    // read-heavy reasoning slot (orchestrator/planner — long context at
+    // a lower price point), Claude Sonnet for the tool-loop slots
+    // (agentic/coding — most reliable function calling, where a single
+    // malformed call degrades the whole sub-agent run), and Gemini
+    // Flash for the high-volume summarization slot.
     roleModels: {
-      reasoning: 'openai/o1',
+      reasoning: 'google/gemini-2.5-pro',
       agentic: 'anthropic/claude-sonnet-4.6',
       coding: 'anthropic/claude-sonnet-4.6',
-      summarization: 'openai/gpt-4o-mini',
+      summarization: 'google/gemini-2.5-flash',
     },
-    note: 'One key, dozens of providers (openrouter.ai). Mix and match per role — swap to meta-llama/llama-3.3-70b-instruct, google/gemini-2.0-flash, etc.',
+    note: 'One key, dozens of providers (openrouter.ai). Defaults mix vendors per role — Gemini 2.5 Pro reasoning, Claude Sonnet agentic/coding, Gemini Flash summarization. Swap any slot freely.',
     tint: {
       idle: 'border-stone-200 hover:border-amber-400 hover:bg-amber-50/40',
       selected: 'border-amber-600 bg-amber-100 ring-2 ring-amber-300 text-amber-900',

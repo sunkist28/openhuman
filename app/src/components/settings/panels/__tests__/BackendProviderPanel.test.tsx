@@ -121,6 +121,32 @@ describe('BackendProviderPanel', () => {
     expect(hints).toEqual(['agentic', 'coding', 'reasoning', 'summarization']);
   });
 
+  it('OpenRouter preset pre-fills the mixed-vendor per-role defaults', async () => {
+    mockClientConfig();
+    renderWithProviders(<BackendProviderPanel />);
+
+    fireEvent.click(await screen.findByRole('button', { name: /^OpenRouter$/i }));
+
+    const keyInput = await screen.findByLabelText(/API Key/i);
+    fireEvent.change(keyInput, { target: { value: 'sk-or-test-123' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /^Save$/i }));
+
+    await waitFor(() => expect(openhumanUpdateModelSettings).toHaveBeenCalled());
+    const args = vi.mocked(openhumanUpdateModelSettings).mock.calls[0][0];
+    expect(args.inference_url).toBe('https://openrouter.ai/api/v1/chat/completions');
+    // Pin the mixed-vendor routing: long-context Gemini Pro on the
+    // read-heavy reasoning slot, Claude Sonnet on the tool-loop slots,
+    // Gemini Flash on the high-volume summarization slot.
+    const byHint = Object.fromEntries((args.model_routes ?? []).map(r => [r.hint, r.model]));
+    expect(byHint).toEqual({
+      reasoning: 'google/gemini-2.5-pro',
+      agentic: 'anthropic/claude-sonnet-4.6',
+      coding: 'anthropic/claude-sonnet-4.6',
+      summarization: 'google/gemini-2.5-flash',
+    });
+  });
+
   it('Save sends model_routes:[] and clears inference_url when switching back to OpenHuman', async () => {
     mockClientConfig({
       inference_url: 'https://api.openai.com/v1/chat/completions',
